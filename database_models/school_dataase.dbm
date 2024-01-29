@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="1.1.0-alpha" use-changelog="false" last-position="0,0" last-zoom="1" max-obj-count="4"
+	 default-schema="public" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
+	 show-layer-names="false" show-layer-rects="false">
+<database name="lab02" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layers="0" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
+</schema>
+
+<table name="tbl_schools" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="720" y="140"/>
+	<column name="school_name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="school_address" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="school_phone_number" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="school_id" not-null="true"
+	 identity-type="ALWAYS">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="school_slogan">
+		<type name="varchar" length="250"/>
+	</column>
+	<constraint name="school_pk" type="pk-constr" table="public.tbl_schools">
+		<columns names="school_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="tbl_students" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1240" y="520"/>
+	<column name="email_address">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="first_name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="last_name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="address" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="student_id" not-null="true"
+	 identity-type="ALWAYS" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="student_pk" type="pk-constr" table="public.tbl_students">
+		<columns names="student_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="tbl_teachers" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="140" y="140"/>
+	<column name="teacher_id" not-null="true"
+	 identity-type="ALWAYS">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="firstname" not-null="true">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="lastname" not-null="true">
+		<type name="varchar" length="200"/>
+	</column>
+	<column name="address" not-null="true">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="salary" not-null="true">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<constraint name="tbl_teachers_pk" type="pk-constr" table="public.tbl_teachers">
+		<columns names="teacher_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="tbl_schools_has_many_tbl_students" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#4df85e"
+	 src-table="public.tbl_schools"
+	 dst-table="public.tbl_students"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="90.9731" y="-17.653"/>
+	</label>
+</relationship>
+
+<table name="tbl_teacher_school" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="440" y="580"/>
+	<column name="school" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="teacher" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="tbl_teacher_school_pk" type="pk-constr" table="public.tbl_teacher_school">
+		<columns names="school,teacher" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="many_tbl_schools_has_many_tbl_teachers" type="relnn" layers="0"
+	 src-col-pattern="{sc}_{st}" dst-col-pattern="{sc}_{dt}"
+	 pk-pattern="{gt}_pk" uq-pattern="{gt}_uq"
+	 src-fk-pattern="{st}_fk" dst-fk-pattern="{dt}_fk"
+	 pk-col-pattern="id"
+	 custom-color="#a46cb5"
+	 src-table="public.tbl_schools"
+	 dst-table="public.tbl_teachers"
+	 src-required="false" dst-required="false"
+	 table-name="many_tbl_schools_has_many_tbl_teachers"/>
+
+<constraint name="teacher_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.tbl_teachers" table="public.tbl_teacher_school">
+	<columns names="teacher" ref-type="src-columns"/>
+	<columns names="teacher_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="school_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.tbl_schools" table="public.tbl_teacher_school">
+	<columns names="school" ref-type="src-columns"/>
+	<columns names="school_id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_tbl_teacher_school_tbl_teachers" type="relfk" layers="0"
+	 src-table="public.tbl_teacher_school"
+	 dst-table="public.tbl_teachers" reference-fk="teacher_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-51.3471" y="-47.653"/>
+	</label>
+</relationship>
+
+<relationship name="rel_tbl_teacher_school_tbl_schools" type="relfk" layers="0"
+	 src-table="public.tbl_teacher_school"
+	 dst-table="public.tbl_schools" reference-fk="school_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="24.7088" y="-47.653"/>
+	</label>
+</relationship>
+
+</dbmodel>
